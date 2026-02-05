@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>My Valentine 💖</title>
+
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(to bottom, #ffe6f0, #fff);
+    font-family: 'Segoe UI', sans-serif;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Background effects */
+.hearts, .petals {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.heart {
+    position: absolute;
+    color: pink;
+    font-size: 14px;
+    animation: float 8s linear infinite;
+    opacity: 0.6;
+}
+
+.petal {
+    position: absolute;
+    font-size: 18px;
+    animation: fall 10s linear infinite;
+    opacity: 0.5;
+}
+
+@keyframes float {
+    from { transform: translateY(100vh); }
+    to { transform: translateY(-10vh); }
+}
+
+@keyframes fall {
+    from { transform: translateY(-10vh) rotate(0deg); }
+    to { transform: translateY(100vh) rotate(360deg); }
+}
+
+/* Card */
+.card {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    z-index: 2;
+}
+
+h1 {
+    color: #ff4d88;
+    margin-bottom: 20px;
+}
+
+.sub {
+    color: #ff7aa2;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+/* Buttons */
+button {
+    padding: 12px 25px;
+    font-size: 16px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    margin: 10px;
+}
+
+#yesBtn {
+    background: #ff4d88;
+    color: white;
+}
+
+#noBtn {
+    background: #ddd;
+    position: absolute;
+}
+
+/* Envelope */
+.envelope-wrapper {
+    animation: popUp 1s ease-out forwards;
+}
+
+@keyframes popUp {
+    from { transform: scale(0.4); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.envelope {
+    width: 300px;
+    height: 200px;
+    background: #ffb6c1;
+    position: relative;
+    border-radius: 12px;
+    cursor: pointer;
+    overflow: hidden;
+    margin: auto;
+}
+
+.flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-left: 150px solid transparent;
+    border-right: 150px solid transparent;
+    border-top: 100px solid #ff8fab;
+    transform-origin: top;
+    transition: transform 1s ease;
+    z-index: 4;
+}
+
+/* Heart seal */
+.seal {
+    position: absolute;
+    top: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 26px;
+    z-index: 5;
+    transition: opacity 0.6s ease;
+}
+
+.letter {
+    position: absolute;
+    bottom: -150px;
+    left: 12px;
+    right: 12px;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    font-size: 18px;
+    color: #ff4d88;
+    text-align: center;
+    transition: bottom 1.2s ease;
+    z-index: 3;
+}
+
+/* Final screen */
+.final {
+    font-size: 26px;
+    color: #ff4d88;
+}
+</style>
+</head>
+
+<body>
+
+<div class="hearts"></div>
+<div class="petals"></div>
+
+<!-- PAGE 1 -->
+<div class="card" id="page1">
+    <h1>Will you be my Valentine? 💖</h1>
+    <div class="sub">Happy Valentine’s Day, my love 💕</div>
+    <button id="yesBtn" onclick="openEnvelope()">YES 💘</button>
+    <button id="noBtn">NO 🙈</button>
+    <div class="sub" id="warning" style="display:none;color:red;">
+        To stay alive click on YES 😈
+    </div>
+</div>
+
+<!-- PAGE 2 -->
+<div class="card" id="page2" style="display:none;">
+    <div class="sub">hehe… you had no choice 😄</div>
+    <div class="envelope-wrapper">
+        <div class="envelope">
+            <div class="flap" id="flap"></div>
+            <div class="seal" id="seal">💗</div>
+            <div class="letter" id="letter">
+                That’s the greatest decision you’ve made in your whole life 💕<br><br>
+                I love you forever ❤️
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- PAGE 3 -->
+<div class="card" id="page3" style="display:none;">
+    <div class="final">I choose you. Always. ❤️</div>
+</div>
+
+<!-- Sound -->
+<audio id="paperSound">
+    <source src="https://www.soundjay.com/misc/sounds/paper-rustle-1.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+/* NO button logic */
+const noBtn = document.getElementById("noBtn");
+let noCount = 0;
+
+noBtn.addEventListener("mouseover", () => {
+    noCount++;
+    if (noCount >= 5) {
+        document.getElementById("warning").style.display = "block";
+    }
+    const x = Math.random() * (window.innerWidth - 100);
+    const y = Math.random() * (window.innerHeight - 50);
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+});
+
+/* YES click */
+function openEnvelope() {
+    document.getElementById("page1").style.display = "none";
+    document.getElementById("page2").style.display = "block";
+
+    setTimeout(openMessage, 2000); // auto open
+}
+
+/* Envelope open */
+function openMessage() {
+    document.getElementById("paperSound").play();
+    document.getElementById("seal").style.opacity = "0";
+    document.getElementById("flap").style.transform = "rotateX(180deg)";
+    document.getElementById("letter").style.bottom = "20px";
+
+    setTimeout(() => {
+        document.getElementById("page2").style.display = "none";
+        document.getElementById("page3").style.display = "block";
+    }, 4000);
+}
+
+/* Floating hearts */
+for (let i = 0; i < 30; i++) {
+    let heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerHTML = "❤";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.animationDuration = (5 + Math.random() * 5) + "s";
+    document.querySelector(".hearts").appendChild(heart);
+}
+
+/* Cherry blossom petals */
+for (let i = 0; i < 20; i++) {
+    let petal = document.createElement("div");
+    petal.className = "petal";
+    petal.innerHTML = "🌸";
+    petal.style.left = Math.random() * 100 + "vw";
+    petal.style.animationDuration = (6 + Math.random() * 6) + "s";
+    document.querySelector(".petals").appendChild(petal);
+}
+</script>
+
+</body>
+</html>
+
